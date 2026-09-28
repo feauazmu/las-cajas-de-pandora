@@ -57,7 +57,7 @@ export interface UpgradeDef {
 
 const stageAssets = (n: number) => ({
   pandora: `assets/img/pandora-${n}.png`,
-  background: `assets/img/bg-${n}.png`,
+  background: `assets/img/bg-${n}.webp`,
   music: `assets/music/stage-${n}.mp3`,
 });
 

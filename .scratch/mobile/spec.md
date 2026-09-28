@@ -18,7 +18,7 @@ Make Las Cajas de Pandora comfortable to play on phones, and installable as a PW
   - Expansion: its details are shown the same way as an Upgrade's, or inline. The existing buy button stays.
 - **Audio**: suspend the AudioContext when the page is hidden and resume it when visible, on all platforms. Set `navigator.audioSession.type = "ambient"` where supported, so the game respects the iOS silent switch and mixes with other audio.
 - **Haptics**: `navigator.vibrate` only when an Inversionista is clicked and when an Expansion is bought, gated by the SFX toggle. iOS ignores it.
-- **PWA**: `name` "Las Cajas de Pandora", `short_name` "Pandora", with icons derived from `pandora-1.png`. Precache the app shell and images, and cache each music track at runtime on first play. The service worker updates silently (auto-update, no prompt).
+- **PWA**: `name` "Las Cajas de Pandora", `short_name` "Pandora", with icons derived from `pandora-1.png`. Precache the app shell and images, and cache each music track at runtime on first play. A new build downloads in the background and is applied silently (no prompt) with a reload the next time the page is hidden (app switch, lock, tab change), so it never interrupts visible play. An hourly check finds new builds in long idle sessions.
 - **Assets**: convert the three Stage backgrounds to WebP.
 - **Verification**: the touch-input decisions (coarse vs fine pointer, long-press timing, the tap-vs-scroll threshold) live in a pure module with vitest tests. Layout is checked by hand in DevTools device mode (360×740 portrait, plus landscape) and on one real iPhone and one real Android.
 

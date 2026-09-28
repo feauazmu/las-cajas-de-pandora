@@ -6,7 +6,7 @@
   "totalCostUsd": 0.533381,
   "assets": [
     {
-      "path": "public/assets/img/bg-1.png",
+      "path": "public/assets/img/bg-1.webp",
       "modality": "image",
       "model": "openai/gpt-image-2.5-flare",
       "params": {
@@ -24,10 +24,10 @@
       "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
       "references": [],
       "costUsd": 0.01075,
-      "postprocess": "quantized to 256-colour optimized PNG, kept at source size"
+      "postprocess": "quantized to 256-colour optimized PNG, kept at source size; then converted to lossy WebP (quality 92, effort 6) with sharp for the mobile/PWA build"
     },
     {
-      "path": "public/assets/img/bg-2.png",
+      "path": "public/assets/img/bg-2.webp",
       "modality": "image",
       "model": "openai/gpt-image-2.5-flare",
       "params": {
@@ -45,10 +45,10 @@
       "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
       "references": [],
       "costUsd": 0.01076,
-      "postprocess": "quantized to 256-colour optimized PNG, kept at source size"
+      "postprocess": "quantized to 256-colour optimized PNG, kept at source size; then converted to lossy WebP (quality 92, effort 6) with sharp for the mobile/PWA build"
     },
     {
-      "path": "public/assets/img/bg-3.png",
+      "path": "public/assets/img/bg-3.webp",
       "modality": "image",
       "model": "openai/gpt-image-2.5-flare",
       "params": {
@@ -66,7 +66,7 @@
       "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
       "references": [],
       "costUsd": 0.01077,
-      "postprocess": "quantized to 256-colour optimized PNG, kept at source size"
+      "postprocess": "quantized to 256-colour optimized PNG, kept at source size; then converted to lossy WebP (quality 92, effort 6) with sharp for the mobile/PWA build"
     },
     {
       "path": "public/assets/img/croqueta.png",
@@ -493,6 +493,48 @@
       "references": [],
       "costUsd": 0.08,
       "postprocess": "trimmed to 0.0-76.5 s (removes leading silence / fade-out tail), last 1.5 s crossfaded (qsin) into the first 1.5 s for a seamless loop (final length 75.0 s), re-encoded MP3 160 kbps 44.1 kHz with ffmpeg"
+    }
+  ],
+  "derivedAssets": [
+    {
+      "path": "public/assets/img/icon-192.png",
+      "derivedFrom": "public/assets/img/pandora-1.png",
+      "size": [
+        192,
+        192
+      ],
+      "purpose": "PWA icon (any)",
+      "postprocess": "square crop of the head and shoulders (source x 60..480, y -30..390, transparent padding above), resized, flattened on #f3e3cb, 256-colour optimized PNG, made with sharp"
+    },
+    {
+      "path": "public/assets/img/icon-512.png",
+      "derivedFrom": "public/assets/img/pandora-1.png",
+      "size": [
+        512,
+        512
+      ],
+      "purpose": "PWA icon (any)",
+      "postprocess": "square crop of the head and shoulders (source x 60..480, y -30..390, transparent padding above), resized, flattened on #f3e3cb, 256-colour optimized PNG, made with sharp"
+    },
+    {
+      "path": "public/assets/img/icon-maskable-512.png",
+      "derivedFrom": "public/assets/img/pandora-1.png",
+      "size": [
+        512,
+        512
+      ],
+      "purpose": "PWA icon (maskable)",
+      "postprocess": "wider square crop (source x -15..545, y -80..480) so the face sits inside the maskable safe zone, resized, flattened on #f3e3cb, 256-colour optimized PNG, made with sharp"
+    },
+    {
+      "path": "public/assets/img/apple-touch-icon.png",
+      "derivedFrom": "public/assets/img/pandora-1.png",
+      "size": [
+        180,
+        180
+      ],
+      "purpose": "iOS apple-touch-icon",
+      "postprocess": "square crop of the head and shoulders (source x 60..480, y -30..390, transparent padding above), resized, flattened on #f3e3cb, 256-colour optimized PNG, made with sharp"
     }
   ]
 }

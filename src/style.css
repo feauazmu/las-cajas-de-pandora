@@ -9,6 +9,11 @@
   --green: #6fae5b;
   --gold: #e7b637;
   --store-width: 380px;
+  --inversionista-width: 140px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
   font-family: "Nunito", "Trebuchet MS", system-ui, sans-serif;
   color: var(--ink);
   background: #f3e3cb;
@@ -38,6 +43,7 @@ button {
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--store-width);
   height: 100vh;
+  height: 100dvh;
   min-width: 0;
 }
 
@@ -50,6 +56,7 @@ button {
   flex-direction: column;
   align-items: center;
   user-select: none;
+  padding: var(--safe-top) 0 var(--safe-bottom) var(--safe-left);
 }
 
 .scene-bg,
@@ -175,6 +182,12 @@ button {
   cursor: pointer;
   filter: drop-shadow(0 10px 12px rgb(59 47 42 / 0.3));
   transition: transform 120ms ease, filter 300ms;
+  /* Rapid taps are clicks, not a zoom, a text selection or the iOS callout. */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .pandora:hover {
@@ -250,8 +263,9 @@ button {
 .inversionista {
   position: absolute !important;
   bottom: 70px;
-  left: calc(var(--progress, 0) * (100% + 180px) - 160px);
-  width: 140px;
+  /* Enters fully off the left edge and leaves fully off the right. */
+  left: calc(var(--progress, 0) * (100% + var(--inversionista-width) + 40px) - var(--inversionista-width) - 20px);
+  width: var(--inversionista-width);
   border: 0;
   padding: 0;
   background: none;
@@ -357,7 +371,9 @@ button {
   background: var(--panel);
   border-left: 4px solid var(--line);
   overflow-y: auto;
-  padding: 14px;
+  --store-pad: 14px;
+  padding: calc(var(--store-pad) + var(--safe-top)) calc(var(--store-pad) + var(--safe-right))
+    calc(var(--store-pad) + var(--safe-bottom)) var(--store-pad);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -483,7 +499,7 @@ button {
 
 .producer {
   display: grid;
-  grid-template-columns: 48px 1fr auto;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
   gap: 10px;
   align-items: center;
   padding: 6px 10px;
@@ -515,6 +531,7 @@ button {
 
 .producer-name {
   font-weight: 800;
+  overflow-wrap: anywhere;
 }
 
 .producer-cost,
@@ -557,10 +574,101 @@ button {
   margin-top: 4px;
 }
 
+/* Upgrade detail card (coarse pointers): a tap opens it instead of buying blind. */
+.detail-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgb(59 47 42 / 0.2);
+}
+
+.detail-card {
+  position: fixed;
+  width: min(300px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px);
+  max-height: calc(100dvh - 16px);
+  overflow-y: auto;
+  padding: 12px 14px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  background: var(--paper);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.3);
+  display: grid;
+  gap: 10px;
+  line-height: 1.35;
+}
+
+.detail-body {
+  display: grid;
+  gap: 3px;
+  padding-right: 36px;
+  font-size: 0.9rem;
+}
+
+.detail-title {
+  font-size: 1.05rem;
+}
+
+.detail-body .tooltip-flavor {
+  color: var(--ink-soft);
+}
+
+.detail-close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.detail-buy {
+  min-height: 44px;
+}
+
+.detail-buy[aria-disabled="true"] {
+  opacity: 0.45;
+}
+
+.expansion-flavor {
+  display: none;
+}
+
+/*
+ * Touch: long-presses on Store items show their details, not a text selection
+ * or callout, buttons don't double-tap zoom, and the Expansion shows its
+ * flavor inline. This is a capability
+ * query, not a layout breakpoint; the phone breakpoints are further down.
+ */
+@media (pointer: coarse) {
+  .expansion-flavor {
+    display: block;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
+  .store {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  /* Every button, the scene's toggles included: rapid taps never zoom. */
+  button {
+    touch-action: manipulation;
+  }
+}
+
 .toasts {
   position: fixed;
-  top: 56px;
+  top: calc(56px + var(--safe-top));
   left: calc((100vw - var(--store-width)) / 2);
+  max-width: calc(100vw - var(--store-width) - 16px);
   transform: translateX(-50%);
   z-index: 40;
   display: grid;
@@ -595,13 +703,15 @@ button {
   z-index: 60;
   display: grid;
   place-items: center;
-  padding: 16px;
+  padding: calc(16px + var(--safe-top)) calc(16px + var(--safe-right)) calc(16px + var(--safe-bottom))
+    calc(16px + var(--safe-left));
   background: rgb(59 47 42 / 0.55);
 }
 
 .modal {
   width: min(520px, 100%);
   max-height: 90vh;
+  max-height: 90dvh;
   overflow-y: auto;
   padding: 22px 26px;
   border: 3px solid var(--ink);
@@ -617,6 +727,7 @@ button {
 
 .modal-actions {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 16px;
@@ -653,4 +764,157 @@ button {
   margin: 14px 0 6px;
   font-size: 1.15rem;
   text-transform: uppercase;
+}
+
+/* ---------- Small screens ---------- */
+
+/*
+ * Breakpoints, repeated in each query below (plain CSS has no named media):
+ * portrait phone = (orientation: portrait) and (max-width: 760px),
+ * landscape phone = (orientation: landscape) and (max-height: 500px).
+ *
+ * Compact scene: both phone orientations. The scene is short, so Pandora
+ * fills whatever height is left instead of a fixed share of the viewport,
+ * and the chrome around her shrinks.
+ */
+@media (orientation: portrait) and (max-width: 760px), (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --inversionista-width: 96px;
+  }
+
+  .ticker {
+    height: 30px;
+    font-size: 0.85rem;
+  }
+
+  .counter {
+    margin-top: 6px;
+    padding: 4px 14px;
+    border-radius: 14px;
+  }
+
+  .counter-main {
+    gap: 6px;
+    font-size: 1.4rem;
+  }
+
+  .counter-cps {
+    font-size: 0.8rem;
+  }
+
+  .frenzy {
+    margin-top: 4px;
+    padding: 2px 12px;
+    font-size: 0.85rem;
+  }
+
+  .pandora {
+    height: min(calc(100% - 8px), 480px);
+  }
+
+  .bubble {
+    top: 0;
+    left: auto;
+    right: 8px;
+    max-width: min(200px, 55%);
+    padding: 6px 10px;
+    border-width: 2px;
+    border-radius: 14px;
+    font-size: 0.8rem;
+  }
+
+  .inversionista {
+    bottom: calc(44px + var(--safe-bottom));
+  }
+
+  /*
+   * Sized so the three control buttons fit on one row at 360px; they wrap below
+   * that. The row gap only applies when they wrap, and keeps the rows' enlarged
+   * hit areas apart.
+   */
+  .controls {
+    flex-wrap: wrap;
+    gap: 12px 4px;
+    margin: 0 8px 6px;
+  }
+
+  .controls .btn-small {
+    position: relative;
+    min-height: 32px;
+    padding: 4px 6px;
+    font-size: 0.7rem;
+  }
+
+  /*
+   * The buttons stay compact, but their touch target is 44px tall: 28px of
+   * padding box plus 8px each way (6px past the border, into the margin).
+   */
+  .controls .btn-small::before {
+    content: "";
+    position: absolute;
+    inset: -8px -2px;
+  }
+
+  .store {
+    --store-pad: 10px;
+    gap: 10px;
+  }
+
+  .store-title {
+    font-size: 1.15rem;
+  }
+
+  .toasts {
+    top: calc(40px + var(--safe-top));
+  }
+
+  .toast {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Portrait phones: scene on top (~45%), store scrolling below (~55%). */
+@media (orientation: portrait) and (max-width: 760px) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 45fr) minmax(0, 55fr);
+  }
+
+  .scene {
+    padding: var(--safe-top) var(--safe-right) 0 var(--safe-left);
+  }
+
+  .store {
+    border-left: 0;
+    border-top: 4px solid var(--line);
+    /* Below the scene, so no top inset; the left edge now touches the screen. */
+    padding: var(--store-pad) calc(var(--store-pad) + var(--safe-right)) calc(var(--store-pad) + var(--safe-bottom))
+      calc(var(--store-pad) + var(--safe-left));
+  }
+
+  .toasts {
+    left: 50%;
+    max-width: calc(100vw - 16px);
+  }
+}
+
+/* Landscape phones: keep the two columns, with a narrower store. */
+@media (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --store-width: min(320px, 45vw);
+  }
+}
+
+/* Narrow or short screens: less modal padding so the Memo and dialogs fit at 360px. */
+@media (max-width: 480px), (max-height: 500px) {
+  .modal {
+    padding: 16px 18px;
+    line-height: 1.4;
+  }
+
+  .memo-header {
+    font-size: 1.3rem;
+    letter-spacing: 0.12em;
+  }
 }

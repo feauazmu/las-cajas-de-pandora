@@ -14,6 +14,8 @@ const QUOTE_COOLDOWN_MS = 15_000;
 const QUOTE_CHANCE = 0.1;
 const QUOTE_VISIBLE_MS = 4_000;
 const CROSSFADE_MS = 600;
+/** How long after a pointer goes down or up its click may still arrive on Pandora. */
+const POINTER_CLICK_WINDOW_MS = 1_000;
 
 export interface SceneCallbacks {
   onReset(): void;
@@ -37,6 +39,8 @@ export class Scene {
   private clickedThisSession = false;
   private bubbleTimer: ReturnType<typeof setTimeout> | undefined;
   private inversionistaShownAt: number | null = null;
+  /** Until then, a click on Pandora comes from a pointer that has already counted. */
+  private pointerActiveUntil = -Infinity;
 
   constructor(
     private readonly game: Game,
@@ -52,7 +56,23 @@ export class Scene {
     counter.append(main, this.cpsLine);
 
     this.pandora.setAttribute("aria-label", es.ui.pandoraAria);
-    this.pandora.addEventListener("click", (e) => this.onPandoraClick(e));
+    // Each finger (or mouse press) counts on pointerdown, so multi-finger taps all count.
+    const pointerActive = () => {
+      this.pointerActiveUntil = performance.now() + POINTER_CLICK_WINDOW_MS;
+    };
+    this.pandora.addEventListener("pointerdown", (e) => {
+      pointerActive();
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      this.onPandoraClick({ x: e.clientX, y: e.clientY });
+    });
+    this.pandora.addEventListener("pointerup", pointerActive);
+    this.pandora.addEventListener("pointercancel", pointerActive);
+    // A pointer's click has already counted on pointerdown. The keyboard
+    // (Enter/Space, detail 0) and a screen reader's activation (a click with
+    // no pointer activity around it) count here, at Pandora's centre.
+    this.pandora.addEventListener("click", (e) => {
+      if (e.detail === 0 || performance.now() > this.pointerActiveUntil) this.onPandoraClick(null);
+    });
     const pandoraArea = el("div", "pandora-area");
     pandoraArea.append(this.pandora, this.bubble);
 
@@ -149,16 +169,15 @@ export class Scene {
     this.sfxToggle.setAttribute("aria-pressed", String(!sfxMuted));
   }
 
-  private onPandoraClick(e: MouseEvent): void {
+  /** One click on Pandora, at the pointer's position, or her centre for the keyboard. */
+  private onPandoraClick(point: { x: number; y: number } | null): void {
     const gained = this.game.click();
     sfx.click();
     replayClass(this.pandora, "squash");
     const host = this.root.getBoundingClientRect();
     const target = this.pandora.getBoundingClientRect();
-    // Keyboard activation has no pointer position; use Pandora's centre.
-    const fromPointer = e.detail > 0;
-    const x = (fromPointer ? e.clientX : target.left + target.width / 2) - host.left;
-    const y = (fromPointer ? e.clientY : target.top + target.height / 2) - host.top;
+    const x = (point ? point.x : target.left + target.width / 2) - host.left;
+    const y = (point ? point.y : target.top + target.height / 2) - host.top;
     floatText(this.effects, x, y, `+${formatCroquetas(gained)}`);
     burst(this.effects, x, y);
 

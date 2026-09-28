@@ -2,7 +2,14 @@
 // Adding a Stage means adding entries here (plus strings in content/es.ts and
 // assets); the engine has no per-Stage branches.
 //
-// Balance (npm run balance): TBD
+// Balance (npm run balance, greedy player at 5 clicks/s, no Inversionista):
+//   La Fábrica reached at 17m 14s, La Multinacional at 55m 49s.
+//   First units: intern_puppy 0m 03s, neighbor_grandma 1m 38s,
+//   industrial_blender 5m 11s, food_truck 13m 19s, assembly_line 20m 59s,
+//   accountant_cats 28m 33s, delivery_truck 36m 25s, tofu_lab 46m 58s,
+//   dog_influencer 71m 12s. Later Producers are the endless game.
+// Tuned from the spec's starting table: Stage 1 CPS ×1.6; Stages 2–3 cost ×0.35
+// and CPS ×3.5–4, so Stage 2 can grow ~100× in the ~40 min to "Salir a Bolsa".
 
 export interface StageDef {
   /** 1-based Stage number; `state.stage` indexes this list. */
@@ -51,18 +58,18 @@ export const STAGES: readonly StageDef[] = [
 ];
 
 export const PRODUCERS: readonly ProducerDef[] = [
-  { id: "intern_puppy", stage: 1, baseCost: 15, baseCps: 0.2 },
-  { id: "neighbor_grandma", stage: 1, baseCost: 100, baseCps: 1 },
-  { id: "industrial_blender", stage: 1, baseCost: 600, baseCps: 5 },
-  { id: "food_truck", stage: 1, baseCost: 4_000, baseCps: 25 },
-  { id: "assembly_line", stage: 2, baseCost: 30_000, baseCps: 120 },
-  { id: "accountant_cats", stage: 2, baseCost: 200_000, baseCps: 600 },
-  { id: "delivery_truck", stage: 2, baseCost: 1_500_000, baseCps: 3_000 },
-  { id: "tofu_lab", stage: 2, baseCost: 10_000_000, baseCps: 15_000 },
-  { id: "dog_influencer", stage: 3, baseCost: 100_000_000, baseCps: 80_000 },
-  { id: "congress_lobby", stage: 3, baseCost: 800_000_000, baseCps: 450_000 },
-  { id: "ad_satellite", stage: 3, baseCost: 6_000_000_000, baseCps: 2_500_000 },
-  { id: "mars_colony", stage: 3, baseCost: 50_000_000_000, baseCps: 14_000_000 },
+  { id: "intern_puppy", stage: 1, baseCost: 15, baseCps: 0.3 },
+  { id: "neighbor_grandma", stage: 1, baseCost: 100, baseCps: 1.6 },
+  { id: "industrial_blender", stage: 1, baseCost: 600, baseCps: 8 },
+  { id: "food_truck", stage: 1, baseCost: 4_000, baseCps: 40 },
+  { id: "assembly_line", stage: 2, baseCost: 10_000, baseCps: 420 },
+  { id: "accountant_cats", stage: 2, baseCost: 70_000, baseCps: 2_100 },
+  { id: "delivery_truck", stage: 2, baseCost: 500_000, baseCps: 10_500 },
+  { id: "tofu_lab", stage: 2, baseCost: 3_500_000, baseCps: 52_500 },
+  { id: "dog_influencer", stage: 3, baseCost: 35_000_000, baseCps: 320_000 },
+  { id: "congress_lobby", stage: 3, baseCost: 280_000_000, baseCps: 1_800_000 },
+  { id: "ad_satellite", stage: 3, baseCost: 2_100_000_000, baseCps: 10_000_000 },
+  { id: "mars_colony", stage: 3, baseCost: 17_500_000_000, baseCps: 56_000_000 },
 ];
 
 export const EXPANSIONS: readonly ExpansionDef[] = [

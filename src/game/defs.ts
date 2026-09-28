@@ -15,6 +15,8 @@ export interface StageDef {
   /** 1-based Stage number; `state.stage` indexes this list. */
   readonly number: number;
   readonly id: string;
+  /** Asset paths relative to the public root. */
+  readonly assets: { readonly pandora: string; readonly background: string; readonly music: string };
 }
 
 export interface ProducerDef {
@@ -51,10 +53,16 @@ export interface UpgradeDef {
   readonly unlock: readonly UnlockCondition[];
 }
 
+const stageAssets = (n: number) => ({
+  pandora: `assets/img/pandora-${n}.png`,
+  background: `assets/img/bg-${n}.png`,
+  music: `assets/music/stage-${n}.mp3`,
+});
+
 export const STAGES: readonly StageDef[] = [
-  { number: 1, id: "kitchen" },
-  { number: 2, id: "factory" },
-  { number: 3, id: "multinational" },
+  { number: 1, id: "kitchen", assets: stageAssets(1) },
+  { number: 2, id: "factory", assets: stageAssets(2) },
+  { number: 3, id: "multinational", assets: stageAssets(3) },
 ];
 
 export const PRODUCERS: readonly ProducerDef[] = [

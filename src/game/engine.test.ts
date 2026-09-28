@@ -78,6 +78,16 @@ describe("production", () => {
     expect(game.cps()).toBeCloseTo(10 * PUPPY + 3 * GRANDMA);
   });
 
+  it("reports each Producer's contribution, including its Upgrades", () => {
+    const { game } = setup({
+      producers: { intern_puppy: 10, neighbor_grandma: 3 },
+      upgrades: ["neighbor_grandma_1"],
+    });
+    expect(game.producerCps("intern_puppy")).toBeCloseTo(10 * PUPPY);
+    expect(game.producerCps("neighbor_grandma")).toBeCloseTo(3 * GRANDMA * 2);
+    expect(game.producerCps("food_truck")).toBe(0);
+  });
+
   it("tick adds cps × elapsed time", () => {
     const { game, clock } = setup({ producers: { neighbor_grandma: 4 } });
     clock.t += 500;
@@ -340,5 +350,15 @@ describe("offline earnings", () => {
     game.applyOffline(clock.t);
     expect(game.inversionista()).toBeNull();
     expect(game.state.nextInversionistaAt).toBe(clock.t + 120_000);
+  });
+});
+
+describe("settings", () => {
+  it("updates mute flags independently", () => {
+    const { game } = setup();
+    game.updateSettings({ musicMuted: true });
+    expect(game.state.settings).toEqual({ musicMuted: true, sfxMuted: false });
+    game.updateSettings({ sfxMuted: true });
+    expect(game.state.settings).toEqual({ musicMuted: true, sfxMuted: true });
   });
 });

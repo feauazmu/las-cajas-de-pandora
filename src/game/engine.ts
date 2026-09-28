@@ -50,6 +50,8 @@ export interface Game {
   buyExpansion(): boolean;
   /** The Expansion out of the current Stage, or null on the last Stage. */
   currentExpansion(): ExpansionDef | null;
+  /** One Producer's croquetas per second, with its Upgrades but without the frenzy. */
+  producerCps(id: ProducerId): number;
   /** Price of the next unit. */
   producerCost(id: ProducerId): number;
   /** Producers of the current and earlier Stages, in definition order. */
@@ -76,6 +78,7 @@ export interface Game {
    * due during the gap is skipped and rescheduled.
    */
   applyOffline(now: number): OfflineReport;
+  updateSettings(changes: Partial<GameState["settings"]>): void;
 }
 
 function producerDef(id: ProducerId): ProducerDef {
@@ -197,6 +200,7 @@ export function createGame({ state, now, rng }: GameOptions): Game {
     frenzyRemainingMs,
     inversionista: () => inversionistaAt(now()),
     producerCost,
+    producerCps: (id) => producerCps(producerDef(id)),
     currentExpansion,
     availableUpgrades,
     visibleProducers: () => PRODUCERS.filter(isAvailable),
@@ -257,6 +261,9 @@ export function createGame({ state, now, rng }: GameOptions): Game {
       if (state.nextInversionistaAt <= t) scheduleInversionista(t);
       refreshUnlocks();
       return { elapsedMs, gain };
+    },
+    updateSettings(changes) {
+      state.settings = { ...state.settings, ...changes };
     },
   };
 }

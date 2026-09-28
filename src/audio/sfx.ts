@@ -1,4 +1,5 @@
-// Synthesized sound effects (Web Audio, no files).
+// Synthesized sound effects (Web Audio, no files), plus a short vibration for
+// the two big events (Inversionista, Expansion). Both obey the SFX toggle.
 
 import { audioContext, onAudioReady } from "./context";
 
@@ -49,6 +50,12 @@ function play(tones: readonly Tone[]): void {
   }
 }
 
+/** Feature-detected: iOS Safari has no `navigator.vibrate`. */
+function vibrate(pattern: number | number[]): void {
+  if (muted || typeof navigator.vibrate !== "function") return;
+  navigator.vibrate(pattern);
+}
+
 const jitter = () => 0.9 + Math.random() * 0.2;
 
 export const sfx = {
@@ -82,6 +89,7 @@ export const sfx = {
     );
   },
   lump() {
+    vibrate(40);
     play(
       Array.from({ length: 9 }, (_, i) => ({
         freq: 1500 + Math.random() * 1200,
@@ -93,6 +101,7 @@ export const sfx = {
     );
   },
   frenzy() {
+    vibrate(40);
     play(
       [523.25, 659.25, 783.99, 1046.5, 1318.5].map((freq, i) => ({
         freq,
@@ -104,6 +113,7 @@ export const sfx = {
     );
   },
   fanfare() {
+    vibrate([60, 60, 120]);
     play([
       { freq: 523.25, duration: 0.16, type: "sawtooth", volume: 0.12 },
       { freq: 659.25, start: 0.16, duration: 0.16, type: "sawtooth", volume: 0.12 },

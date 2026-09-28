@@ -1,8 +1,15 @@
 import { describe, expect, it } from "vitest";
 import { createGame, type Game } from "./engine";
+import { PRODUCERS } from "./defs";
 import { createInitialState, type GameState } from "./state";
 
 const T0 = 1_000_000;
+
+// Per-unit output from the (tunable) data, so balance changes don't break these tests.
+const baseCps = (id: string) => PRODUCERS.find((p) => p.id === id)!.baseCps;
+const PUPPY = baseCps("intern_puppy");
+const GRANDMA = baseCps("neighbor_grandma");
+const ASSEMBLY = baseCps("assembly_line");
 
 function setup(overrides: Partial<GameState> = {}, rngValues: number[] = [0.5]) {
   const clock = { t: T0 };
@@ -68,22 +75,22 @@ describe("Stage gating", () => {
 describe("production", () => {
   it("sums baseCps × owned across Producers", () => {
     const { game } = setup({ producers: { intern_puppy: 10, neighbor_grandma: 3 } });
-    expect(game.cps()).toBeCloseTo(2 + 3);
+    expect(game.cps()).toBeCloseTo(10 * PUPPY + 3 * GRANDMA);
   });
 
   it("tick adds cps × elapsed time", () => {
     const { game, clock } = setup({ producers: { neighbor_grandma: 4 } });
     clock.t += 500;
     game.tick(clock.t);
-    expect(game.state.croquetas).toBeCloseTo(2);
-    expect(game.state.totalCroquetas).toBeCloseTo(2);
+    expect(game.state.croquetas).toBeCloseTo(4 * GRANDMA * 0.5);
+    expect(game.state.totalCroquetas).toBeCloseTo(4 * GRANDMA * 0.5);
   });
 
   it("clamps a single tick to one second", () => {
     const { game, clock } = setup({ producers: { neighbor_grandma: 4 } });
     clock.t += 30_000;
     game.tick(clock.t);
-    expect(game.state.croquetas).toBeCloseTo(4);
+    expect(game.state.croquetas).toBeCloseTo(4 * GRANDMA);
   });
 });
 
@@ -132,7 +139,7 @@ describe("Upgrades", () => {
     game.tick(T0);
     game.buyUpgrade("neighbor_grandma_1");
     game.buyUpgrade("neighbor_grandma_2");
-    expect(game.cps()).toBeCloseTo(10 * 1 * 4 + 5 * 0.2);
+    expect(game.cps()).toBeCloseTo(10 * GRANDMA * 4 + 5 * PUPPY);
   });
 });
 
@@ -177,12 +184,12 @@ describe("click Upgrades", () => {
       croquetas: 1e9,
       stage: 2,
       totalClicks: 1_000,
-      producers: { assembly_line: 10 }, // 1 200 cps
+      producers: { assembly_line: 10 },
       unlockedUpgrades: [],
     });
     game.tick(T0);
     game.buyUpgrade("click_4");
-    expect(game.clickValue()).toBeCloseTo(1 + 12);
+    expect(game.clickValue()).toBeCloseTo(1 + 0.01 * 10 * ASSEMBLY);
   });
 });
 
@@ -257,11 +264,11 @@ describe("Inversionista", () => {
     expect(game.state.frenzyUntil).toBe(clock.t + 30_000);
     expect(game.inversionista()).toBeNull();
     expect(game.state.nextInversionistaAt).toBe(clock.t + 2 * MIN);
-    expect(game.cps()).toBeCloseTo(14);
+    expect(game.cps()).toBeCloseTo(2 * GRANDMA * 7);
     expect(game.clickValue()).toBe(7);
     expect(game.frenzyRemainingMs()).toBe(30_000);
     clock.t += 30_000;
-    expect(game.cps()).toBeCloseTo(2);
+    expect(game.cps()).toBeCloseTo(2 * GRANDMA);
     expect(game.clickValue()).toBe(1);
     expect(game.frenzyRemainingMs()).toBe(0);
   });
@@ -269,11 +276,11 @@ describe("Inversionista", () => {
   it("applies the frenzy to click_4's CPS share only once", () => {
     const { game } = setup({
       stage: 2,
-      producers: { assembly_line: 10 }, // 1 200 cps
+      producers: { assembly_line: 10 },
       upgrades: ["click_4"],
       frenzyUntil: T0 + 10_000,
     });
-    expect(game.clickValue()).toBeCloseTo((1 + 12) * 7);
+    expect(game.clickValue()).toBeCloseTo((1 + 0.01 * 10 * ASSEMBLY) * 7);
   });
 
   it("a second frenzy resets the timer instead of stacking", () => {
@@ -284,19 +291,19 @@ describe("Inversionista", () => {
     clock.t = T0 + 5_000;
     game.clickInversionista();
     expect(game.state.frenzyUntil).toBe(T0 + 35_000);
-    expect(game.cps()).toBeCloseTo(7);
+    expect(game.cps()).toBeCloseTo(GRANDMA * 7);
   });
 
   it("Cheque Gordo: gains min(bank × 0.15, cps × 900) + 13", () => {
-    // Bank-limited: 0.15 × 1 000 = 150 < 1 × 900.
+    // Bank-limited: 0.15 × 1 000 = 150 < cps × 900.
     const a = setup({ croquetas: 1_000, producers: { neighbor_grandma: 1 } }, [0.7, 0]);
     a.clock.t = a.game.state.nextInversionistaAt;
     expect(a.game.clickInversionista()).toEqual({ kind: "lump", amount: 163 });
     expect(a.game.state.croquetas).toBe(1_163);
-    // CPS-limited: 1 × 900 = 900 < 0.15 × 100 000.
+    // CPS-limited: cps × 900 < 0.15 × 100 000.
     const b = setup({ croquetas: 100_000, producers: { neighbor_grandma: 1 } }, [0.7, 0]);
     b.clock.t = b.game.state.nextInversionistaAt;
-    expect(b.game.clickInversionista()).toEqual({ kind: "lump", amount: 913 });
+    expect(b.game.clickInversionista()).toEqual({ kind: "lump", amount: GRANDMA * 900 + 13 });
     expect(b.game.state.frenzyUntil).toBeNull();
   });
 });
@@ -306,19 +313,19 @@ describe("offline earnings", () => {
 
   it("credits baseCps × elapsed since the last accounted time", () => {
     const { game } = setup({ producers: { neighbor_grandma: 2 } });
-    expect(game.applyOffline(T0 + 10 * 60_000)).toEqual({ elapsedMs: 10 * 60_000, gain: 1_200 });
-    expect(game.state.croquetas).toBe(1_200);
+    expect(game.applyOffline(T0 + 10 * 60_000)).toEqual({ elapsedMs: 10 * 60_000, gain: 2 * GRANDMA * 600 });
+    expect(game.state.croquetas).toBeCloseTo(2 * GRANDMA * 600);
     expect(game.state.lastSavedAt).toBe(T0 + 10 * 60_000);
   });
 
   it("caps elapsed time at 8 h", () => {
     const { game } = setup({ producers: { neighbor_grandma: 1 } });
-    expect(game.applyOffline(T0 + 30 * HOUR)).toEqual({ elapsedMs: 8 * HOUR, gain: 8 * 3_600 });
+    expect(game.applyOffline(T0 + 30 * HOUR)).toEqual({ elapsedMs: 8 * HOUR, gain: GRANDMA * 8 * 3_600 });
   });
 
   it("never applies the frenzy", () => {
     const { game } = setup({ producers: { neighbor_grandma: 1 }, frenzyUntil: T0 + 10 * HOUR });
-    expect(game.applyOffline(T0 + 100_000).gain).toBe(100);
+    expect(game.applyOffline(T0 + 100_000).gain).toBeCloseTo(GRANDMA * 100);
   });
 
   it("gains nothing when the clock went backwards", () => {

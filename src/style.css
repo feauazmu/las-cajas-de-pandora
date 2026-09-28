@@ -9,7 +9,7 @@
   --green: #6fae5b;
   --gold: #e7b637;
   --store-width: 380px;
-  --inv-width: 140px;
+  --inversionista-width: 140px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-right: env(safe-area-inset-right, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -258,8 +258,8 @@ button {
   position: absolute !important;
   bottom: 70px;
   /* Enters fully off the left edge and leaves fully off the right. */
-  left: calc(var(--progress, 0) * (100% + var(--inv-width) + 40px) - var(--inv-width) - 20px);
-  width: var(--inv-width);
+  left: calc(var(--progress, 0) * (100% + var(--inversionista-width) + 40px) - var(--inversionista-width) - 20px);
+  width: var(--inversionista-width);
   border: 0;
   padding: 0;
   background: none;
@@ -365,7 +365,9 @@ button {
   background: var(--panel);
   border-left: 4px solid var(--line);
   overflow-y: auto;
-  padding: calc(14px + var(--safe-top)) calc(14px + var(--safe-right)) calc(14px + var(--safe-bottom)) 14px;
+  --store-pad: 14px;
+  padding: calc(var(--store-pad) + var(--safe-top)) calc(var(--store-pad) + var(--safe-right))
+    calc(var(--store-pad) + var(--safe-bottom)) var(--store-pad);
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -671,13 +673,17 @@ button {
 /* ---------- Small screens ---------- */
 
 /*
- * Compact scene: phones in portrait and in landscape. The scene is short, so
- * Pandora fills whatever height is left instead of a fixed share of the
- * viewport, and the chrome around her shrinks.
+ * Breakpoints, repeated in each query below (plain CSS has no named media):
+ * portrait phone = (orientation: portrait) and (max-width: 760px),
+ * landscape phone = (orientation: landscape) and (max-height: 500px).
+ *
+ * Compact scene: both phone orientations. The scene is short, so Pandora
+ * fills whatever height is left instead of a fixed share of the viewport,
+ * and the chrome around her shrinks.
  */
 @media (orientation: portrait) and (max-width: 760px), (orientation: landscape) and (max-height: 500px) {
   :root {
-    --inv-width: 96px;
+    --inversionista-width: 96px;
   }
 
   .ticker {
@@ -708,7 +714,6 @@ button {
 
   .pandora {
     height: min(calc(100% - 8px), 480px);
-    max-width: 100%;
   }
 
   .bubble {
@@ -723,10 +728,10 @@ button {
   }
 
   .inversionista {
-    bottom: 44px;
+    bottom: calc(44px + var(--safe-bottom));
   }
 
-  /* Sized so all three fit on one row at 360px; they wrap below that. */
+  /* Sized so the three control buttons fit on one row at 360px; they wrap below that. */
   .controls {
     flex-wrap: wrap;
     gap: 4px;
@@ -739,8 +744,8 @@ button {
   }
 
   .store {
+    --store-pad: 10px;
     gap: 10px;
-    padding: calc(10px + var(--safe-top)) calc(10px + var(--safe-right)) calc(10px + var(--safe-bottom)) 10px;
   }
 
   .store-title {
@@ -767,7 +772,9 @@ button {
   .store {
     border-left: 0;
     border-top: 4px solid var(--line);
-    padding: 10px calc(10px + var(--safe-right)) calc(10px + var(--safe-bottom)) calc(10px + var(--safe-left));
+    /* Below the scene, so no top inset; the left edge now touches the screen. */
+    padding: var(--store-pad) calc(var(--store-pad) + var(--safe-right)) calc(var(--store-pad) + var(--safe-bottom))
+      calc(var(--store-pad) + var(--safe-left));
   }
 
   .toasts {
@@ -788,7 +795,7 @@ button {
   }
 }
 
-/* Narrow modals: less padding so the Memo and dialogs fit at 360px. */
+/* Narrow or short screens: less modal padding so the Memo and dialogs fit at 360px. */
 @media (max-width: 480px), (max-height: 500px) {
   .modal {
     padding: 16px 18px;

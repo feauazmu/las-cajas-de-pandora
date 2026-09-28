@@ -4,6 +4,9 @@
 import { audioContext, onAudioReady } from "./context";
 
 const VOLUME = 0.5;
+/** Vibration patterns in ms (vibrate, pause, vibrate...). */
+const BUZZ_INVERSIONISTA: VibratePattern = 40;
+const BUZZ_EXPANSION: VibratePattern = [60, 60, 120];
 
 let master: GainNode | null = null;
 let muted = false;
@@ -51,7 +54,7 @@ function play(tones: readonly Tone[]): void {
 }
 
 /** Feature-detected: iOS Safari has no `navigator.vibrate`. */
-function vibrate(pattern: number | number[]): void {
+function vibrate(pattern: VibratePattern): void {
   if (muted || typeof navigator.vibrate !== "function") return;
   navigator.vibrate(pattern);
 }
@@ -89,7 +92,7 @@ export const sfx = {
     );
   },
   lump() {
-    vibrate(40);
+    vibrate(BUZZ_INVERSIONISTA);
     play(
       Array.from({ length: 9 }, (_, i) => ({
         freq: 1500 + Math.random() * 1200,
@@ -101,7 +104,7 @@ export const sfx = {
     );
   },
   frenzy() {
-    vibrate(40);
+    vibrate(BUZZ_INVERSIONISTA);
     play(
       [523.25, 659.25, 783.99, 1046.5, 1318.5].map((freq, i) => ({
         freq,
@@ -113,7 +116,7 @@ export const sfx = {
     );
   },
   fanfare() {
-    vibrate([60, 60, 120]);
+    vibrate(BUZZ_EXPANSION);
     play([
       { freq: 523.25, duration: 0.16, type: "sawtooth", volume: 0.12 },
       { freq: 659.25, start: 0.16, duration: 0.16, type: "sawtooth", volume: 0.12 },

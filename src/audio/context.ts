@@ -62,7 +62,9 @@ export function unlockAudioOnFirstGesture(): void {
     }
     if (!document.hidden) resume(ctx);
   };
-  for (const type of ["pointerdown", "keydown"] as const) {
+  // A touch's pointerdown is not a user activation (its pointerup, touchend and
+  // click are), so a tap would create the context but leave it suspended.
+  for (const type of ["pointerdown", "pointerup", "touchend", "click", "keydown"] as const) {
     window.addEventListener(type, unlock, { capture: true });
   }
   document.addEventListener("visibilitychange", () => {

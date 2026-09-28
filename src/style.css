@@ -640,7 +640,8 @@ button {
 
 /*
  * Touch: long-presses on Store items show their details, not a text selection
- * or callout, and the Expansion shows its flavor inline. This is a capability
+ * or callout, buttons don't double-tap zoom, and the Expansion shows its
+ * flavor inline. This is a capability
  * query, not a layout breakpoint; the phone breakpoints are further down.
  */
 @media (pointer: coarse) {
@@ -657,7 +658,8 @@ button {
     -webkit-touch-callout: none;
   }
 
-  .store button {
+  /* Every button, the scene's toggles included: rapid taps never zoom. */
+  button {
     touch-action: manipulation;
   }
 }
@@ -825,8 +827,11 @@ button {
     bottom: calc(44px + var(--safe-bottom));
   }
 
-  /* Sized so the three control buttons fit on one row at 360px; they wrap below that. */
-  /* The row gap only applies when the buttons wrap (below 360px); it keeps the rows' enlarged hit areas apart. */
+  /*
+   * Sized so the three control buttons fit on one row at 360px; they wrap below
+   * that. The row gap only applies when they wrap, and keeps the rows' enlarged
+   * hit areas apart.
+   */
   .controls {
     flex-wrap: wrap;
     gap: 12px 4px;
@@ -859,6 +864,10 @@ button {
     font-size: 1.15rem;
   }
 
+  .toasts {
+    top: calc(40px + var(--safe-top));
+  }
+
   .toast {
     padding: 6px 12px;
     font-size: 0.85rem;
@@ -885,7 +894,6 @@ button {
   }
 
   .toasts {
-    top: calc(40px + var(--safe-top));
     left: 50%;
     max-width: calc(100vw - 16px);
   }
@@ -895,10 +903,6 @@ button {
 @media (orientation: landscape) and (max-height: 500px) {
   :root {
     --store-width: min(320px, 45vw);
-  }
-
-  .toasts {
-    top: calc(40px + var(--safe-top));
   }
 }
 

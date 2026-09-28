@@ -57,16 +57,16 @@ export class Scene {
 
     this.pandora.setAttribute("aria-label", es.ui.pandoraAria);
     // Each finger (or mouse press) counts on pointerdown, so multi-finger taps all count.
-    this.pandora.addEventListener("pointerdown", (e) => {
+    const pointerActive = () => {
       this.pointerActiveUntil = performance.now() + POINTER_CLICK_WINDOW_MS;
+    };
+    this.pandora.addEventListener("pointerdown", (e) => {
+      pointerActive();
       if (e.pointerType === "mouse" && e.button !== 0) return;
       this.onPandoraClick({ x: e.clientX, y: e.clientY });
     });
-    const pointerSettled = () => {
-      this.pointerActiveUntil = performance.now() + POINTER_CLICK_WINDOW_MS;
-    };
-    this.pandora.addEventListener("pointerup", pointerSettled);
-    this.pandora.addEventListener("pointercancel", pointerSettled);
+    this.pandora.addEventListener("pointerup", pointerActive);
+    this.pandora.addEventListener("pointercancel", pointerActive);
     // A pointer's click has already counted on pointerdown. The keyboard
     // (Enter/Space, detail 0) and a screen reader's activation (a click with
     // no pointer activity around it) count here, at Pandora's centre.

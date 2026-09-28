@@ -42,6 +42,9 @@ export function openDetailCard(options: DetailCardOptions): DetailCard {
   const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
 
   const place = () => {
+    // The Store rebuilds its Upgrade buttons when a new one unlocks; a detached
+    // anchor has no position, so the card stays where it is.
+    if (!options.anchor.isConnected) return;
     const { left, top } = placePopup(
       options.anchor.getBoundingClientRect(),
       card.getBoundingClientRect(),
@@ -58,6 +61,12 @@ export function openDetailCard(options: DetailCardOptions): DetailCard {
       e.preventDefault();
       (document.activeElement === buy ? close : buy).focus();
     }
+  };
+
+  // Returning to the page may open the offline-earnings modal; don't leave the
+  // card (and its Tab trap) under it.
+  const onHidden = () => {
+    if (document.hidden) handle.close();
   };
 
   const handle: DetailCard = {
@@ -78,6 +87,7 @@ export function openDetailCard(options: DetailCardOptions): DetailCard {
       open = false;
       backdrop.remove();
       document.removeEventListener("keydown", onKey);
+      document.removeEventListener("visibilitychange", onHidden);
       window.removeEventListener("resize", place);
       if (opener?.isConnected) opener.focus({ preventScroll: true });
       options.onClose?.();
@@ -93,6 +103,7 @@ export function openDetailCard(options: DetailCardOptions): DetailCard {
     else handle.refresh();
   });
   document.addEventListener("keydown", onKey);
+  document.addEventListener("visibilitychange", onHidden);
   // Rotating the phone moves the anchor.
   window.addEventListener("resize", place);
 

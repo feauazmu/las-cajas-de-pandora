@@ -337,6 +337,7 @@ export const es: Content = {
     upgradeEffectClick: "Duplica las croquetas por clic",
     upgradeEffectClickCps: "+1 % de tu producción por segundo en cada clic",
     buy: "Comprar",
+    close: "Cerrar",
     frenzyIndicator: (seconds) => `¡Ronda de Financiación! ×${FRENZY_MULTIPLIER} — ${seconds} s`,
     inversionistaAria: "Inversionista: haz clic para recibir su inversión",
     pandoraAria: "Pandora, la jefa: haz clic para producir croquetas",

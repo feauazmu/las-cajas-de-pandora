@@ -12,8 +12,9 @@ export default defineConfig({
   base: "./",
   plugins: [
     VitePWA({
-      registerType: "autoUpdate",
-      // src/pwa.ts registers the service worker (and reloads onto a new build).
+      // "prompt" leaves a new build waiting; src/pwa.ts registers the service worker and applies
+      // the waiting build once the page is hidden, instead of reloading mid-play.
+      registerType: "prompt",
       injectRegister: false,
       // The glob below already precaches the icons.
       includeManifestIcons: false,
@@ -46,9 +47,8 @@ export default defineConfig({
         globPatterns: ["**/*.{html,js,css,png,webp,svg,ico}"],
         globIgnores: ["**/pandora-ref.png"],
         cleanupOutdatedCaches: true,
-        // The plugin only sets these itself when it injects the registration. Without
-        // clientsClaim the first visit is uncontrolled and the music it plays isn't cached.
-        skipWaiting: true,
+        // Without clientsClaim the first visit is uncontrolled and the music it plays isn't cached.
+        // No skipWaiting: an update waits until src/pwa.ts applies it while the page is hidden.
         clientsClaim: true,
         runtimeCaching: [
           {

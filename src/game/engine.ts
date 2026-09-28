@@ -4,6 +4,7 @@ import {
   EXPANSIONS,
   FRENZY_DURATION_MS,
   FRENZY_MULTIPLIER,
+  INVERSIONISTA_FRENZY_CHANCE,
   INVERSIONISTA_VISIBLE_MS,
   LUMP_BANK_FRACTION,
   LUMP_BONUS,
@@ -12,9 +13,11 @@ import {
   OFFLINE_EFFICIENCY,
   MAX_TICK_MS,
   PRODUCERS,
+  STAGES,
   UPGRADES,
   type ExpansionDef,
   type ProducerDef,
+  type StageDef,
   type UnlockCondition,
   type UpgradeDef,
 } from "./defs";
@@ -48,6 +51,7 @@ export interface Game {
   buyUpgrade(id: UpgradeId): boolean;
   /** Buys the current Stage's Expansion and advances the Stage; false if none or unaffordable. */
   buyExpansion(): boolean;
+  currentStage(): StageDef;
   /** The Expansion out of the current Stage, or null on the last Stage. */
   currentExpansion(): ExpansionDef | null;
   /** One Producer's croquetas per second, with its Upgrades but without the frenzy. */
@@ -186,6 +190,11 @@ export function createGame({ state, now, rng }: GameOptions): Game {
     );
   }
 
+  /** Time since production was last accounted for, clamped to [0, cap]. */
+  function elapsedSinceAccounted(t: number, cap: number): number {
+    return Math.min(Math.max(t - state.lastSavedAt, 0), cap);
+  }
+
   function currentExpansion(): ExpansionDef | null {
     return EXPANSIONS.find((e) => e.fromStage === state.stage) ?? null;
   }
@@ -202,6 +211,7 @@ export function createGame({ state, now, rng }: GameOptions): Game {
     producerCost,
     producerCps: (id) => producerCps(producerDef(id)),
     currentExpansion,
+    currentStage: () => STAGES[state.stage - 1]!,
     availableUpgrades,
     visibleProducers: () => PRODUCERS.filter(isAvailable),
     click() {
@@ -234,7 +244,7 @@ export function createGame({ state, now, rng }: GameOptions): Game {
       const t = now();
       if (!inversionistaAt(t)) return null;
       let outcome: InversionistaOutcome;
-      if (rng() < 0.5) {
+      if (rng() < INVERSIONISTA_FRENZY_CHANCE) {
         state.frenzyUntil = t + FRENZY_DURATION_MS;
         outcome = { kind: "frenzy" };
       } else {
@@ -247,14 +257,14 @@ export function createGame({ state, now, rng }: GameOptions): Game {
       return outcome;
     },
     tick(t) {
-      const dt = Math.min(Math.max(t - state.lastSavedAt, 0), MAX_TICK_MS);
+      const dt = elapsedSinceAccounted(t, MAX_TICK_MS);
       state.lastSavedAt = t;
       earn((cps() * dt) / 1000);
       if (t >= state.nextInversionistaAt + INVERSIONISTA_VISIBLE_MS) scheduleInversionista(t);
       refreshUnlocks();
     },
     applyOffline(t) {
-      const elapsedMs = Math.min(Math.max(t - state.lastSavedAt, 0), OFFLINE_CAP_MS);
+      const elapsedMs = elapsedSinceAccounted(t, OFFLINE_CAP_MS);
       const gain = (baseCps() * elapsedMs * OFFLINE_EFFICIENCY) / 1000;
       state.lastSavedAt = t;
       earn(gain);

@@ -3,8 +3,8 @@ import { unlockAudioOnFirstGesture } from "./audio/context";
 import { playMusic } from "./audio/music";
 import { sfx } from "./audio/sfx";
 import { es } from "./content/es";
-import { STAGES } from "./game/defs";
-import { createGame } from "./game/engine";
+import { MAX_TICK_MS } from "./game/defs";
+import { createGame, type OfflineReport } from "./game/engine";
 import { deserialize, SAVE_KEY, serialize } from "./game/save";
 import { createInitialState } from "./game/state";
 import { formatCroquetas } from "./format/number";
@@ -44,8 +44,7 @@ function save(): void {
   }
 }
 
-const stageDef = () => STAGES[game.state.stage - 1]!;
-const stageContent = () => es.stages[stageDef().id]!;
+const stageContent = () => es.stages[game.currentStage().id]!;
 
 const scene = new Scene(game, {
   onReset: () =>
@@ -64,7 +63,7 @@ const store = new Store(game, {
   onExpansion() {
     sfx.fanfare();
     scene.showStage();
-    playMusic(asset(stageDef().assets.music));
+    playMusic(asset(game.currentStage().assets.music));
     save();
     showMemo(stageContent().memo, () => scene.sayQuote());
   },
@@ -76,9 +75,9 @@ app.append(scene.root, store.root);
 app.classList.add("layout");
 
 unlockAudioOnFirstGesture();
-playMusic(asset(stageDef().assets.music));
+playMusic(asset(game.currentStage().assets.music));
 
-function offerOffline(report: { elapsedMs: number; gain: number }): void {
+function offerOffline(report: OfflineReport): void {
   if (report.gain <= 0) return;
   showOffline(es.ui.duration(report.elapsedMs), formatCroquetas(report.gain), pick(es.offlineLines));
 }
@@ -89,10 +88,21 @@ if (isNewGame) {
   offerOffline(game.applyOffline(now()));
 }
 
+/**
+ * Credits a gap longer than one tick (tab hidden, throttled or suspended)
+ * through the offline path, whichever of the next frame or the
+ * visibilitychange event notices it first.
+ */
+function catchUp(t: number): void {
+  const report = game.applyOffline(t);
+  if (report.elapsedMs >= OFFLINE_POPUP_MIN_MS) offerOffline(report);
+}
+
 let lastStoreRefresh = 0;
 function frame(): void {
   const t = now();
-  game.tick(t);
+  if (t - game.state.lastSavedAt > MAX_TICK_MS) catchUp(t);
+  else game.tick(t);
   scene.update(t);
   if (t - lastStoreRefresh >= STORE_REFRESH_MS) {
     lastStoreRefresh = t;
@@ -103,16 +113,9 @@ function frame(): void {
 requestAnimationFrame(frame);
 
 setInterval(save, AUTOSAVE_MS);
-let hiddenAt: number | null = null;
 document.addEventListener("visibilitychange", () => {
-  if (document.visibilityState === "hidden") {
-    hiddenAt = now();
-    save();
-    return;
-  }
-  const report = game.applyOffline(now());
-  if (hiddenAt !== null && now() - hiddenAt >= OFFLINE_POPUP_MIN_MS) offerOffline(report);
-  hiddenAt = null;
+  if (document.visibilityState === "hidden") save();
+  else catchUp(now());
 });
 window.addEventListener("pagehide", save);
 

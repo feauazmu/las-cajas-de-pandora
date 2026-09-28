@@ -11,6 +11,8 @@ let bus: GainNode | null = null;
 let muted = false;
 let wantedUrl: string | null = null;
 let current: { url: string; source: AudioBufferSourceNode; gain: GainNode } | null = null;
+/** Track being fetched/decoded, so overlapping calls don't start it twice. */
+let starting: string | null = null;
 const buffers = new Map<string, Promise<AudioBuffer>>();
 
 onAudioReady((audio) => {
@@ -33,15 +35,21 @@ function load(url: string): Promise<AudioBuffer> {
 }
 
 async function start(url: string): Promise<void> {
-  if (!ctx || !bus || current?.url === url) return;
+  if (!ctx || !bus || current?.url === url || starting === url) return;
+  starting = url;
   let buffer: AudioBuffer;
   try {
     buffer = await load(url);
   } catch (error) {
     console.warn(`Could not load music ${url}`, error);
     return;
+  } finally {
+    starting = null;
   }
-  if (wantedUrl !== url) return;
+  if (wantedUrl !== url) {
+    if (wantedUrl) void start(wantedUrl);
+    return;
+  }
   const now = ctx.currentTime;
   const gain = ctx.createGain();
   gain.gain.setValueAtTime(0, now);

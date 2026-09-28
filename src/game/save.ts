@@ -47,10 +47,10 @@ function validate(data: Record<string, unknown>): GameState {
     version: SAVE_VERSION,
     croquetas: num(data.croquetas),
     totalCroquetas: num(data.totalCroquetas),
-    totalClicks: num(data.totalClicks),
+    totalClicks: count(data.totalClicks),
     stage,
     producers: Object.fromEntries(
-      PRODUCERS.map((p) => [p.id, producers[p.id] === undefined ? 0 : num(producers[p.id])]),
+      PRODUCERS.map((p) => [p.id, producers[p.id] === undefined ? 0 : count(producers[p.id])]),
     ),
     upgrades: knownUpgrades(data.upgrades),
     unlockedUpgrades: knownUpgrades(data.unlockedUpgrades),
@@ -68,6 +68,12 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function num(value: unknown): number {
   if (typeof value !== "number" || !Number.isFinite(value)) throw new Error(`Not a number: ${String(value)}`);
   return value;
+}
+
+function count(value: unknown): number {
+  const n = num(value);
+  if (!Number.isInteger(n) || n < 0) throw new Error(`Not a count: ${n}`);
+  return n;
 }
 
 function bool(value: unknown): boolean {

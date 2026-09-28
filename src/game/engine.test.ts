@@ -204,6 +204,13 @@ describe("click Upgrades", () => {
 });
 
 describe("Expansions", () => {
+  it("exposes the current Stage's definition", () => {
+    const { game } = setup({ croquetas: 60_000 });
+    expect(game.currentStage().id).toBe("kitchen");
+    game.buyExpansion();
+    expect(game.currentStage().id).toBe("factory");
+  });
+
   it("offers the current Stage's Expansion", () => {
     const { game } = setup();
     expect(game.currentExpansion()).toMatchObject({ id: "buy_factory", cost: 50_000 });

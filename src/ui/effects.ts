@@ -1,6 +1,5 @@
+import { CROQUETA_IMG } from "./assets";
 import { asset, el } from "./dom";
-
-const CROQUETA = "assets/img/croqueta.png";
 
 /** "+N" that drifts up from the cursor and fades. */
 export function floatText(host: HTMLElement, x: number, y: number, text: string): void {
@@ -15,7 +14,7 @@ export function floatText(host: HTMLElement, x: number, y: number, text: string)
 export function burst(host: HTMLElement, x: number, y: number, count = 6): void {
   for (let i = 0; i < count; i++) {
     const img = el("img", "particle");
-    img.src = asset(CROQUETA);
+    img.src = asset(CROQUETA_IMG);
     img.alt = "";
     const angle = Math.random() * Math.PI * 2;
     const distance = 40 + Math.random() * 60;

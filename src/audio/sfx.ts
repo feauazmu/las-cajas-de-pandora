@@ -2,18 +2,20 @@
 
 import { audioContext, onAudioReady } from "./context";
 
+const VOLUME = 0.5;
+
 let master: GainNode | null = null;
 let muted = false;
 
 onAudioReady((ctx) => {
   master = ctx.createGain();
-  master.gain.value = muted ? 0 : 0.5;
+  master.gain.value = muted ? 0 : VOLUME;
   master.connect(ctx.destination);
 });
 
 export function setSfxMuted(value: boolean): void {
   muted = value;
-  if (master) master.gain.value = muted ? 0 : 0.5;
+  if (master) master.gain.value = muted ? 0 : VOLUME;
 }
 
 interface Tone {

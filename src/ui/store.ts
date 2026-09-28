@@ -3,11 +3,9 @@ import { es } from "../content/es";
 import { PRODUCERS, STAGES, type UpgradeDef } from "../game/defs";
 import type { Game } from "../game/engine";
 import { formatCps, formatCroquetas } from "../format/number";
+import { CROQUETA_IMG, producerIcon } from "./assets";
 import { asset, el } from "./dom";
 import { attachTooltip } from "./tooltip";
-
-const CROQUETA_ICON = "assets/img/croqueta.png";
-const producerIcon = (id: string) => `assets/img/producer-${id}.png`;
 
 interface ProducerRow {
   id: string;
@@ -113,7 +111,7 @@ export class Store {
         button.setAttribute("aria-label", text.name);
         const icon = el("img");
         icon.src = asset(
-          u.effect.kind === "producerMultiplier" ? producerIcon(u.effect.producerId) : CROQUETA_ICON,
+          u.effect.kind === "producerMultiplier" ? producerIcon(u.effect.producerId) : CROQUETA_IMG,
         );
         icon.alt = "";
         const badge = el(

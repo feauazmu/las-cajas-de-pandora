@@ -1,9 +1,10 @@
 import { setMusicMuted } from "../audio/music";
 import { setSfxMuted, sfx } from "../audio/sfx";
 import { es } from "../content/es";
-import { FRENZY_MULTIPLIER, STAGES } from "../game/defs";
+import { FRENZY_MULTIPLIER } from "../game/defs";
 import type { Game } from "../game/engine";
 import { formatCps, formatCroquetas } from "../format/number";
+import { CROQUETA_IMG, INVERSIONISTA_IMG } from "./assets";
 import { asset, el, pick } from "./dom";
 import { burst, floatText, replayClass } from "./effects";
 import { toast } from "./modals";
@@ -44,7 +45,7 @@ export class Scene {
     const counter = el("div", "counter");
     const unit = el("span", "counter-unit", ` ${es.ui.croquetasUnit}`);
     const icon = el("img", "counter-icon");
-    icon.src = asset("assets/img/croqueta.png");
+    icon.src = asset(CROQUETA_IMG);
     icon.alt = "";
     const main = el("div", "counter-main");
     main.append(icon, this.counter, unit);
@@ -56,7 +57,7 @@ export class Scene {
     pandoraArea.append(this.pandora, this.bubble);
 
     const invImg = el("img");
-    invImg.src = asset("assets/img/inversionista.png");
+    invImg.src = asset(INVERSIONISTA_IMG);
     invImg.alt = "";
     this.inversionista.append(invImg);
     this.inversionista.hidden = true;
@@ -94,7 +95,7 @@ export class Scene {
 
   /** Swaps the background and Pandora for the current Stage; crossfades unless `animate` is false. */
   showStage(animate = true): void {
-    const stage = STAGES[this.game.state.stage - 1]!;
+    const stage = this.game.currentStage();
     crossfade(this.background, asset(stage.assets.background), animate, "bg");
     crossfade(this.pandora, asset(stage.assets.pandora), animate, "pandora-img");
     this.ticker.setHeadlines(es.stages[stage.id]?.tickerHeadlines ?? []);
@@ -102,7 +103,7 @@ export class Scene {
 
   /** Makes Pandora speak now, ignoring the cooldown (first click, after an Expansion). */
   sayQuote(): void {
-    const stage = STAGES[this.game.state.stage - 1]!;
+    const stage = this.game.currentStage();
     const quotes = es.stages[stage.id]?.quotes ?? [];
     if (quotes.length === 0) return;
     this.lastQuoteAt = performance.now();

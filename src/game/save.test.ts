@@ -37,6 +37,8 @@ describe("save", () => {
     ["wrong field type", JSON.stringify({ ...played(), croquetas: "lots" })],
     ["missing field", JSON.stringify({ ...played(), stage: undefined })],
     ["stage out of range", JSON.stringify({ ...played(), stage: 7 })],
+    ["negative producer count", JSON.stringify({ ...played(), producers: { intern_puppy: -3 } })],
+    ["fractional click count", JSON.stringify({ ...played(), totalClicks: 1.5 })],
   ])("falls back to a new game on a corrupt save (%s) and warns", (_label, raw) => {
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     expect(deserialize(raw, fresh)).toEqual(fresh());

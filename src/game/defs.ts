@@ -7,9 +7,11 @@
 //   First units: intern_puppy 0m 03s, neighbor_grandma 1m 38s,
 //   industrial_blender 5m 11s, food_truck 13m 19s, assembly_line 20m 59s,
 //   accountant_cats 28m 33s, delivery_truck 36m 25s, tofu_lab 46m 58s,
-//   dog_influencer 71m 12s. Later Producers are the endless game.
-// Tuned from the spec's starting table: Stage 1 CPS ×1.6; Stages 2–3 cost ×0.35
-// and CPS ×3.5–4, so Stage 2 can grow ~100× in the ~40 min to "Salir a Bolsa".
+//   dog_influencer 56m 40s, congress_lobby 71m 08s. Later Producers are the
+//   endless game.
+// Tuned from the spec's starting table: Stage 1 CPS ×1.6; Stage 2 cost ×0.35
+// and CPS ×3.5, so it can grow ~100× in the ~40 min to "Salir a Bolsa";
+// Stage 3 cost ×0.1 and CPS ×4, so its first Producer arrives soon after.
 
 export interface StageDef {
   /** 1-based Stage number; `state.stage` indexes this list. */
@@ -74,10 +76,10 @@ export const PRODUCERS: readonly ProducerDef[] = [
   { id: "accountant_cats", stage: 2, baseCost: 70_000, baseCps: 2_100 },
   { id: "delivery_truck", stage: 2, baseCost: 500_000, baseCps: 10_500 },
   { id: "tofu_lab", stage: 2, baseCost: 3_500_000, baseCps: 52_500 },
-  { id: "dog_influencer", stage: 3, baseCost: 35_000_000, baseCps: 320_000 },
-  { id: "congress_lobby", stage: 3, baseCost: 280_000_000, baseCps: 1_800_000 },
-  { id: "ad_satellite", stage: 3, baseCost: 2_100_000_000, baseCps: 10_000_000 },
-  { id: "mars_colony", stage: 3, baseCost: 17_500_000_000, baseCps: 56_000_000 },
+  { id: "dog_influencer", stage: 3, baseCost: 10_000_000, baseCps: 320_000 },
+  { id: "congress_lobby", stage: 3, baseCost: 85_000_000, baseCps: 1_800_000 },
+  { id: "ad_satellite", stage: 3, baseCost: 650_000_000, baseCps: 10_000_000 },
+  { id: "mars_colony", stage: 3, baseCost: 5_000_000_000, baseCps: 56_000_000 },
 ];
 
 export const EXPANSIONS: readonly ExpansionDef[] = [
@@ -147,6 +149,8 @@ export const FRENZY_DURATION_MS = 30_000;
 export const INVERSIONISTA_MIN_DELAY_MS = 2 * 60_000;
 export const INVERSIONISTA_MAX_DELAY_MS = 5 * 60_000;
 export const INVERSIONISTA_VISIBLE_MS = 12_000;
+/** Chance a clicked Inversionista gives a Ronda de Financiación rather than a Cheque Gordo. */
+export const INVERSIONISTA_FRENZY_CHANCE = 0.5;
 export const LUMP_BANK_FRACTION = 0.15;
 export const LUMP_CPS_SECONDS = 900;
 export const LUMP_BONUS = 13;

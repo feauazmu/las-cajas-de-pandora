@@ -1,6 +1,6 @@
 import { el } from "./dom";
 import { isCoarsePointer, PressGesture } from "./input";
-import { placeTooltip } from "./placement";
+import { placePopup } from "./popup";
 
 export interface TooltipContent {
   title: string;
@@ -24,7 +24,7 @@ function show(target: HTMLElement, c: TooltipContent, coarse: boolean): void {
   const r = target.getBoundingClientRect();
   const t = tip.getBoundingClientRect();
   const viewport = { width: window.innerWidth, height: window.innerHeight };
-  const { left, top } = placeTooltip(r, t, viewport, coarse);
+  const { left, top } = placePopup(r, t, viewport, coarse);
   tip.style.left = `${left}px`;
   tip.style.top = `${top}px`;
   tip.classList.add("visible");
@@ -73,7 +73,10 @@ export function attachTooltip(target: HTMLElement, content: () => TooltipContent
   target.addEventListener("contextmenu", (e) => {
     if (isCoarsePointer()) e.preventDefault();
   });
-  // Capture phase, so this runs before the item's own click (buy) handler.
+  // Capture phase, so this runs before the item's own click (buy) handler
+  // when the click lands on a child. When it lands on the item itself, older
+  // engines run listeners in registration order, so callers attach the
+  // tooltip before their click handler.
   target.addEventListener(
     "click",
     (e) => {

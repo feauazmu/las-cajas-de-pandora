@@ -1,6 +1,6 @@
 import { es } from "../content/es";
 import { el } from "./dom";
-import { placeTooltip } from "./placement";
+import { placePopup } from "./popup";
 import { renderDetails, type TooltipContent } from "./tooltip";
 
 export interface DetailCardOptions {
@@ -22,7 +22,8 @@ export interface DetailCard {
 /**
  * The touch replacement for an Upgrade's hover tooltip: its details plus a
  * Comprar button, so a tap never buys blind. Tapping outside the card, ✕ or
- * Escape closes it; the transparent backdrop swallows that outside tap.
+ * Escape closes it; the dimmed backdrop swallows that outside tap, so it
+ * never reaches the Store underneath.
  */
 export function openDetailCard(options: DetailCardOptions): DetailCard {
   const backdrop = el("div", "detail-backdrop");
@@ -37,24 +38,48 @@ export function openDetailCard(options: DetailCardOptions): DetailCard {
   backdrop.append(card);
 
   let open = true;
+  let rendered = "";
   const opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+
+  const place = () => {
+    const { left, top } = placePopup(
+      options.anchor.getBoundingClientRect(),
+      card.getBoundingClientRect(),
+      { width: window.innerWidth, height: window.innerHeight },
+      true,
+    );
+    card.style.left = `${left}px`;
+    card.style.top = `${top}px`;
+  };
   const onKey = (e: KeyboardEvent) => {
     if (e.key === "Escape") handle.close();
+    // Keep Tab inside the card: its only controls are ✕ and Comprar.
+    if (e.key === "Tab") {
+      e.preventDefault();
+      (document.activeElement === buy ? close : buy).focus();
+    }
   };
+
   const handle: DetailCard = {
     refresh() {
       if (!open) return;
+      buy.setAttribute("aria-disabled", String(!options.canBuy()));
       const c = options.content();
+      const signature = JSON.stringify(c);
+      // Only touch the text when it changes, so screen readers aren't interrupted.
+      if (signature === rendered) return;
+      rendered = signature;
       renderDetails(body, c, "detail-title");
       card.setAttribute("aria-label", c.title);
-      buy.setAttribute("aria-disabled", String(!options.canBuy()));
+      if (backdrop.isConnected) place();
     },
     close() {
       if (!open) return;
       open = false;
       backdrop.remove();
       document.removeEventListener("keydown", onKey);
-      opener?.focus({ preventScroll: true });
+      window.removeEventListener("resize", place);
+      if (opener?.isConnected) opener.focus({ preventScroll: true });
       options.onClose?.();
     },
   };
@@ -68,17 +93,12 @@ export function openDetailCard(options: DetailCardOptions): DetailCard {
     else handle.refresh();
   });
   document.addEventListener("keydown", onKey);
+  // Rotating the phone moves the anchor.
+  window.addEventListener("resize", place);
 
   handle.refresh();
   document.body.append(backdrop);
-  const { left, top } = placeTooltip(
-    options.anchor.getBoundingClientRect(),
-    card.getBoundingClientRect(),
-    { width: window.innerWidth, height: window.innerHeight },
-    true,
-  );
-  card.style.left = `${left}px`;
-  card.style.top = `${top}px`;
+  place();
   buy.focus({ preventScroll: true });
   return handle;
 }

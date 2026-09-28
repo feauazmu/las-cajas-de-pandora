@@ -634,8 +634,23 @@ button {
   opacity: 0.45;
 }
 
-/* Touch: long-presses on Store items show their details, not a text selection or callout. */
+.expansion-flavor {
+  display: none;
+}
+
+/*
+ * Touch: long-presses on Store items show their details, not a text selection
+ * or callout, and the Expansion shows its flavor inline. This is a capability
+ * query, not a layout breakpoint; the phone breakpoints are further down.
+ */
 @media (pointer: coarse) {
+  .expansion-flavor {
+    display: block;
+    font-size: 0.8rem;
+    font-style: italic;
+    color: var(--ink-soft);
+  }
+
   .store {
     user-select: none;
     -webkit-user-select: none;

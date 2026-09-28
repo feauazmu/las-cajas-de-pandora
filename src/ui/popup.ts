@@ -23,7 +23,7 @@ const clamp = (value: number, min: number, max: number) => Math.max(min, Math.mi
  * fine. Otherwise above the item, or below it when there's no room above,
  * centred on it and kept inside the viewport.
  */
-export function placeTooltip(
+export function placePopup(
   target: Rect,
   tip: Size,
   viewport: Size,

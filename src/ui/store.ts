@@ -28,6 +28,8 @@ export class Store {
   private readonly expansion = el("section", "expansion");
   private readonly expansionName = el("div", "expansion-name");
   private readonly expansionCost = el("div", "expansion-cost");
+  /** Shown only on coarse pointers (CSS), where there's no hover tooltip to carry it. */
+  private readonly expansionFlavor = el("div", "expansion-flavor");
   private readonly expansionBar = el("div", "expansion-bar-fill");
   private readonly expansionButton = el("button", "btn btn-primary expansion-button", es.ui.buy);
   private readonly upgrades = el("div", "upgrades");
@@ -49,6 +51,7 @@ export class Store {
       el("div", "expansion-label", es.ui.expansionHeading),
       this.expansionName,
       this.expansionCost,
+      this.expansionFlavor,
       bar,
       this.expansionButton,
     );
@@ -92,16 +95,17 @@ export class Store {
     info.append(el("div", "producer-name", text.name), cost, cps);
     const owned = el("div", "producer-owned");
     row.append(icon, info, owned);
-    row.addEventListener("click", () => {
-      if (this.game.buyProducer(id)) sfx.buy();
-      else sfx.denied();
-      this.update();
-    });
+    // Before the buy handler, so its long-press/drag click guard runs first.
     attachTooltip(row, () => ({
       title: text.name,
       lines: [es.ui.cost(formatCroquetas(this.game.producerCost(id)))],
       flavor: text.flavor,
     }));
+    row.addEventListener("click", () => {
+      if (this.game.buyProducer(id)) sfx.buy();
+      else sfx.denied();
+      this.update();
+    });
     this.stageGroups.get(stage)!.append(row);
     this.rows.push({ id, stage, row, owned, cost, cps });
   }
@@ -129,12 +133,12 @@ export class Store {
           lines: [effectText(u), es.ui.cost(formatCroquetas(u.cost))],
           flavor: text.flavor,
         });
+        attachTooltip(button, details);
         button.addEventListener("click", () => {
           // On touch there's no hover to read the Upgrade first, so a tap opens its card.
           if (isCoarsePointer()) this.openUpgradeCard(u, button, details);
           else this.buyUpgrade(u);
         });
-        attachTooltip(button, details);
         return button;
       }),
     );
@@ -175,6 +179,7 @@ export class Store {
     if (exp) {
       this.expansionName.textContent = es.expansions[exp.id]?.name ?? "";
       this.expansionCost.textContent = es.ui.cost(formatCroquetas(exp.cost));
+      this.expansionFlavor.textContent = es.expansions[exp.id]?.flavor ?? "";
       this.expansionBar.style.width = `${Math.min(bank / exp.cost, 1) * 100}%`;
       this.expansionButton.setAttribute("aria-disabled", String(bank < exp.cost));
     }

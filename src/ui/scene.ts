@@ -14,6 +14,8 @@ const QUOTE_COOLDOWN_MS = 15_000;
 const QUOTE_CHANCE = 0.1;
 const QUOTE_VISIBLE_MS = 4_000;
 const CROSSFADE_MS = 600;
+/** How long after a pointer goes down or up its click may still arrive on Pandora. */
+const POINTER_CLICK_WINDOW_MS = 1_000;
 
 export interface SceneCallbacks {
   onReset(): void;
@@ -37,6 +39,8 @@ export class Scene {
   private clickedThisSession = false;
   private bubbleTimer: ReturnType<typeof setTimeout> | undefined;
   private inversionistaShownAt: number | null = null;
+  /** Until then, a click on Pandora comes from a pointer that has already counted. */
+  private pointerActiveUntil = -Infinity;
 
   constructor(
     private readonly game: Game,
@@ -54,13 +58,20 @@ export class Scene {
     this.pandora.setAttribute("aria-label", es.ui.pandoraAria);
     // Each finger (or mouse press) counts on pointerdown, so multi-finger taps all count.
     this.pandora.addEventListener("pointerdown", (e) => {
+      this.pointerActiveUntil = performance.now() + POINTER_CLICK_WINDOW_MS;
       if (e.pointerType === "mouse" && e.button !== 0) return;
       this.onPandoraClick({ x: e.clientX, y: e.clientY });
     });
-    // Keyboard activation (Enter/Space) only fires click, with no pointer
-    // (detail 0). A pointer's click has already counted on pointerdown.
+    const pointerSettled = () => {
+      this.pointerActiveUntil = performance.now() + POINTER_CLICK_WINDOW_MS;
+    };
+    this.pandora.addEventListener("pointerup", pointerSettled);
+    this.pandora.addEventListener("pointercancel", pointerSettled);
+    // A pointer's click has already counted on pointerdown. The keyboard
+    // (Enter/Space, detail 0) and a screen reader's activation (a click with
+    // no pointer activity around it) count here, at Pandora's centre.
     this.pandora.addEventListener("click", (e) => {
-      if (e.detail === 0) this.onPandoraClick(null);
+      if (e.detail === 0 || performance.now() > this.pointerActiveUntil) this.onPandoraClick(null);
     });
     const pandoraArea = el("div", "pandora-area");
     pandoraArea.append(this.pandora, this.bubble);

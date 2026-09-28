@@ -5,7 +5,9 @@ import type { Game } from "../game/engine";
 import { formatCps, formatCroquetas } from "../format/number";
 import { CROQUETA_IMG, producerIcon } from "./assets";
 import { asset, el } from "./dom";
-import { attachTooltip } from "./tooltip";
+import { openDetailCard, type DetailCard } from "./detail";
+import { isCoarsePointer } from "./input";
+import { attachTooltip, hideTooltip, type TooltipContent } from "./tooltip";
 
 interface ProducerRow {
   id: string;
@@ -32,6 +34,8 @@ export class Store {
   private readonly stageGroups = new Map<number, HTMLElement>();
   private readonly rows: ProducerRow[] = [];
   private upgradeSignature = "";
+  /** The open Upgrade detail card (coarse pointers only). */
+  private detail: DetailCard | null = null;
 
   constructor(
     private readonly game: Game,
@@ -120,21 +124,45 @@ export class Store {
           u.effect.kind === "clickCpsFraction" ? "+%" : `×${u.effect.multiplier}`,
         );
         button.append(icon, badge);
-        button.addEventListener("click", () => {
-          if (this.game.buyUpgrade(u.id)) {
-            sfx.buy();
-            document.querySelector(".tooltip")?.classList.remove("visible");
-          } else sfx.denied();
-          this.update();
-        });
-        attachTooltip(button, () => ({
+        const details = (): TooltipContent => ({
           title: text.name,
           lines: [effectText(u), es.ui.cost(formatCroquetas(u.cost))],
           flavor: text.flavor,
-        }));
+        });
+        button.addEventListener("click", () => {
+          // On touch there's no hover to read the Upgrade first, so a tap opens its card.
+          if (isCoarsePointer()) this.openUpgradeCard(u, button, details);
+          else this.buyUpgrade(u);
+        });
+        attachTooltip(button, details);
         return button;
       }),
     );
+  }
+
+  /** The one buy path for an Upgrade, from a desktop click or the card's Comprar. */
+  private buyUpgrade(u: UpgradeDef): boolean {
+    const bought = this.game.buyUpgrade(u.id);
+    if (bought) {
+      sfx.buy();
+      hideTooltip();
+    } else sfx.denied();
+    this.update();
+    return bought;
+  }
+
+  private openUpgradeCard(u: UpgradeDef, anchor: HTMLElement, content: () => TooltipContent): void {
+    this.detail?.close();
+    const card = openDetailCard({
+      anchor,
+      content,
+      canBuy: () => this.game.state.croquetas >= u.cost,
+      buy: () => this.buyUpgrade(u),
+      onClose: () => {
+        if (this.detail === card) this.detail = null;
+      },
+    });
+    this.detail = card;
   }
 
   /** Refreshes counts, costs and affordability. Cheap enough to call several times a second. */
@@ -161,6 +189,7 @@ export class Store {
       const def = available.find((u) => u.id === button.dataset.id);
       button.classList.toggle("unaffordable", !def || bank < def.cost);
     }
+    this.detail?.refresh();
 
     for (const [number, group] of this.stageGroups) group.hidden = number > state.stage;
     for (const r of this.rows) {

@@ -182,6 +182,12 @@ button {
   cursor: pointer;
   filter: drop-shadow(0 10px 12px rgb(59 47 42 / 0.3));
   transition: transform 120ms ease, filter 300ms;
+  /* Rapid taps are clicks, not a zoom, a text selection or the iOS callout. */
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .pandora:hover {
@@ -568,6 +574,79 @@ button {
   margin-top: 4px;
 }
 
+/* Upgrade detail card (coarse pointers): a tap opens it instead of buying blind. */
+.detail-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  background: rgb(59 47 42 / 0.2);
+}
+
+.detail-card {
+  position: fixed;
+  width: min(300px, calc(100vw - 16px));
+  max-height: calc(100vh - 16px);
+  max-height: calc(100dvh - 16px);
+  overflow-y: auto;
+  padding: 12px 14px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  background: var(--paper);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.3);
+  display: grid;
+  gap: 10px;
+  line-height: 1.35;
+}
+
+.detail-body {
+  display: grid;
+  gap: 3px;
+  padding-right: 36px;
+  font-size: 0.9rem;
+}
+
+.detail-title {
+  font-size: 1.05rem;
+}
+
+.detail-body .tooltip-flavor {
+  color: var(--ink-soft);
+}
+
+.detail-close {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: none;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.detail-buy {
+  min-height: 44px;
+}
+
+.detail-buy[aria-disabled="true"] {
+  opacity: 0.45;
+}
+
+/* Touch: long-presses on Store items show their details, not a text selection or callout. */
+@media (pointer: coarse) {
+  .store {
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+  }
+
+  .store button {
+    touch-action: manipulation;
+  }
+}
+
 .toasts {
   position: fixed;
   top: calc(56px + var(--safe-top));
@@ -732,15 +811,28 @@ button {
   }
 
   /* Sized so the three control buttons fit on one row at 360px; they wrap below that. */
+  /* The row gap only applies when the buttons wrap (below 360px); it keeps the rows' enlarged hit areas apart. */
   .controls {
     flex-wrap: wrap;
-    gap: 4px;
+    gap: 12px 4px;
     margin: 0 8px 6px;
   }
 
   .controls .btn-small {
+    position: relative;
+    min-height: 32px;
     padding: 4px 6px;
     font-size: 0.7rem;
+  }
+
+  /*
+   * The buttons stay compact, but their touch target is 44px tall: 28px of
+   * padding box plus 8px each way (6px past the border, into the margin).
+   */
+  .controls .btn-small::before {
+    content: "";
+    position: absolute;
+    inset: -8px -2px;
   }
 
   .store {

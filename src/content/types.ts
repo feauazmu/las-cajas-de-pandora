@@ -42,6 +42,7 @@ export interface UiStrings {
   readonly upgradeEffectClick: string; // "Duplica las croquetas por clic"
   readonly upgradeEffectClickCps: string; // "+1 % de tu producción por segundo en cada clic"
   readonly buy: string;
+  readonly close: string; // accessible label for the ✕ that closes an Upgrade's detail card
   readonly frenzyIndicator: (seconds: number) => string; // "¡Ronda de Financiación! ×7 — 23 s"
   readonly inversionistaAria: string; // accessible label for the clickable Inversionista
   readonly pandoraAria: string;

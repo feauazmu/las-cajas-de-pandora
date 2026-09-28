@@ -1,8 +1,9 @@
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 
-// Page background (`:root` in src/style.css), used for the splash screen and the status bar.
-const PAPER = "#f3e3cb";
+// The page background (the `background` of `:root` in src/style.css, not the `--paper` token),
+// used for the splash screen and the status bar. index.html repeats it in its theme-color meta.
+const PAGE_BG = "#f3e3cb";
 
 // Relative base so the static build works from any path (GitHub Pages serves it from a subpath).
 // Every PWA URL below is relative too: the manifest resolves against its own URL and the
@@ -26,8 +27,8 @@ export default defineConfig({
         scope: "./",
         display: "standalone",
         orientation: "portrait",
-        theme_color: PAPER,
-        background_color: PAPER,
+        theme_color: PAGE_BG,
+        background_color: PAGE_BG,
         icons: [
           { src: "assets/img/icon-192.png", sizes: "192x192", type: "image/png", purpose: "any" },
           { src: "assets/img/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any" },

@@ -13,6 +13,7 @@ registerSW({
   onRegisteredSW(_swUrl, registration) {
     if (!registration) return;
     setInterval(() => {
+      // A failed check (offline, flaky network) is harmless: the next one retries.
       if (navigator.onLine) registration.update().catch(() => {});
     }, UPDATE_CHECK_MS);
   },

@@ -1,0 +1,498 @@
+{
+  "generator": "creation-tool (OpenRouter)",
+  "generatedAt": "2026-09-28",
+  "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+  "notes": "Pandora master reference (pandora-ref) was generated first and used as input reference for pandora-1..3. Image prompts are the full final prompts (style prefix included).",
+  "totalCostUsd": 0.533381,
+  "assets": [
+    {
+      "path": "public/assets/img/bg-1.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "2:3",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "opaque",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1536
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Background scene for a game, no characters: a warm cozy home kitchen interior, wooden cabinets, stove with pots, window with plants, tiled floor. Low detail and empty open floor space in the center where a character will stand; details kept to the edges. No text, no signs.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01075,
+      "postprocess": "quantized to 256-colour optimized PNG, kept at source size"
+    },
+    {
+      "path": "public/assets/img/bg-2.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "2:3",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "opaque",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1536
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Background scene for a game, no characters: interior of a cheerful vegan kibble factory, conveyor belts, pipes, machines, sacks of vegetables and kibble along the edges. Low detail and empty open floor space in the center where a character will stand. No text, no signs, no logos.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01076,
+      "postprocess": "quantized to 256-colour optimized PNG, kept at source size"
+    },
+    {
+      "path": "public/assets/img/bg-3.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "2:3",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "opaque",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1536
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Background scene for a game, no characters: a luxurious skyscraper headquarters penthouse office, huge windows with a city skyline, marble floor, gold accents, velvet curtains at the edges. Low detail and empty open floor space in the center where a character will stand. No text, no signs, no logos.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01077,
+      "postprocess": "quantized to 256-colour optimized PNG, kept at source size"
+    },
+    {
+      "path": "public/assets/img/croqueta.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A single cute round brown vegan kibble piece with a small green leaf sprouting from it, tiny happy face optional.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01361,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/inversionista.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. A cat investor in a sharp business suit carrying a briefcase in one paw and a money bag in the other, side view walking to the right, full body, smug expression, centered, isolated on a transparent background.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01356,
+      "postprocess": "cropped to alpha bounding box (3% margin), resized to 512 px tall, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/pandora-1.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "2:3",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1536
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Keep the exact same dog character as the reference image: Pandora, a West Highland White Terrier with white fluffy coat, upright pointed ears, dark eyes, black nose. Full body, centered, isolated on a transparent background. Pandora as a proud home cook in a cozy kitchen role: wearing a cute apron, holding a wooden spoon, standing next to a pot of lentils, pompous confident expression.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [
+        "public/assets/img/pandora-ref.png"
+      ],
+      "costUsd": 0.019102,
+      "postprocess": "cropped to alpha bounding box (3% margin), resized to 768 px tall, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/pandora-2.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "2:3",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1536
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Keep the exact same dog character as the reference image: Pandora, a West Highland White Terrier with white fluffy coat, upright pointed ears, dark eyes, black nose. Full body, centered, isolated on a transparent background. Pandora as a factory boss: wearing a business suit and a yellow hard hat, pointing with one paw at a simple rising bar chart on an easel (no numbers, no text), self-important expression.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [
+        "public/assets/img/pandora-ref.png"
+      ],
+      "costUsd": 0.019127,
+      "postprocess": "cropped to alpha bounding box (3% margin), resized to 768 px tall, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/pandora-3.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "2:3",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1536
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Keep the exact same dog character as the reference image: Pandora, a West Highland White Terrier with white fluffy coat, upright pointed ears, dark eyes, black nose. Full body, centered, isolated on a transparent background. Pandora as a pompous billionaire tycoon: wearing a monocle and a luxurious tiny cape, sitting regally on a throne made of stacked kibble boxes (boxes blank, no labels, no text).",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [
+        "public/assets/img/pandora-ref.png"
+      ],
+      "costUsd": 0.019127,
+      "postprocess": "cropped to alpha bounding box (3% margin), resized to 768 px tall, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/pandora-ref.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Character reference sheet of Pandora, a West Highland White Terrier (Westie) dog: white fluffy coat, upright pointed ears, dark eyes, black nose, confident slightly pompous expression. Full body, standing, neutral three-quarter pose, centered, isolated on a transparent background.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.013615,
+      "postprocess": "cropped to alpha bounding box (3% margin), resized to 768 px tall, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-accountant_cats.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. Two cute cats wearing tiny glasses and visors working on an old calculator and an abacus.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.013585,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-ad_satellite.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A cute satellite in space with solar panels and a blank billboard screen showing a paw print.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01358,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-assembly_line.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A small factory assembly line conveyor belt carrying round brown kibble pieces with a robotic arm.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01358,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-congress_lobby.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A classical domed government capitol building with columns and a briefcase of cash in front.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.013585,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-delivery_truck.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A cute boxy delivery truck loaded with cardboard boxes, side view.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01356,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-dog_influencer.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A stylish dog influencer with sunglasses taking a selfie with a smartphone, sparkles and small heart icons.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01359,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-food_truck.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A cute colorful food truck with a dog-bone shape on the roof, side view.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01358,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-industrial_blender.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A big chunky industrial kitchen blender full of green vegetables, whirring.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.013565,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-intern_puppy.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A small cute puppy intern wearing an oversized badge lanyard and holding a tiny coffee cup.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.013585,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-mars_colony.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A small red planet Mars with a glass dome colony on top and a paw-print flag.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.01358,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-neighbor_grandma.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A sweet elderly grandma neighbor with glasses and a bun, holding a mixing bowl with kibble.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.013585,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/img/producer-tofu_lab.png",
+      "modality": "image",
+      "model": "openai/gpt-image-2.5-flare",
+      "params": {
+        "aspect_ratio": "1:1",
+        "quality": "medium",
+        "output_format": "png",
+        "background": "transparent",
+        "seed": null,
+        "sourceSize": [
+          1024,
+          1024
+        ]
+      },
+      "prompt": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text. Single game store icon, one centered subject, bold simple silhouette readable at 48 pixels, no text, no letters, isolated on a transparent background. A tofu laboratory: a white tofu block next to a bubbling green science flask and test tubes.",
+      "stylePrefix": "Cute flat vector cartoon illustration, bold clean outlines, soft pastel palette with warm accents, simple shading, children's-book comedy tone, no text.",
+      "references": [],
+      "costUsd": 0.013585,
+      "postprocess": "cropped to alpha bounding box (3% margin), padded to square, resized to 256x256, 256-colour optimized PNG"
+    },
+    {
+      "path": "public/assets/music/stage-1.mp3",
+      "modality": "music",
+      "model": "google/lyria-3-pro-preview",
+      "params": {
+        "seed": null,
+        "sourceDurationSeconds": 73.482
+      },
+      "prompt": "Instrumental only, no vocals, no singing. About 75 seconds long, a background music loop for a cozy comedic idle browser game, consistent energy from start to end with no intro build-up and no fade-out ending so it loops seamlessly. Light acoustic, playful, homey kitchen vibe with a hint of Colombian cumbia rhythm: nylon guitar, soft accordion, guacharaca shaker, light percussion, warm and whimsical.",
+      "stylePrefix": null,
+      "references": [],
+      "costUsd": 0.08,
+      "postprocess": "trimmed to 1.0-67.0 s (removes leading silence / fade-out tail), last 1.5 s crossfaded (qsin) into the first 1.5 s for a seamless loop (final length 64.5 s), re-encoded MP3 160 kbps 44.1 kHz with ffmpeg"
+    },
+    {
+      "path": "public/assets/music/stage-2.mp3",
+      "modality": "music",
+      "model": "google/lyria-3-pro-preview",
+      "params": {
+        "seed": null,
+        "sourceDurationSeconds": 72.882
+      },
+      "prompt": "Instrumental only, no vocals, no singing. About 75 seconds long, a background music loop for a cozy comedic idle browser game, consistent energy from start to end with no intro build-up and no fade-out ending so it loops seamlessly. Upbeat industrial funk with a mechanical rhythm: slap bass, wah guitar, clanking metallic percussion like factory machines, tight groovy drums, playful and busy.",
+      "stylePrefix": null,
+      "references": [],
+      "costUsd": 0.08,
+      "postprocess": "trimmed to 0.0-70.0 s (removes leading silence / fade-out tail), last 1.5 s crossfaded (qsin) into the first 1.5 s for a seamless loop (final length 68.5 s), re-encoded MP3 160 kbps 44.1 kHz with ffmpeg"
+    },
+    {
+      "path": "public/assets/music/stage-3.mp3",
+      "modality": "music",
+      "model": "google/lyria-3-pro-preview",
+      "params": {
+        "seed": null,
+        "sourceDurationSeconds": 81.554
+      },
+      "prompt": "Instrumental only, no vocals, no singing. About 75 seconds long, a background music loop for a cozy comedic idle browser game, consistent energy from start to end with no intro build-up and no fade-out ending so it loops seamlessly. Pompous orchestral corporate epic: grand brass fanfares, strings, timpani, choir-like synth pads without words, tongue-in-cheek self-important and triumphant, like a billionaire's victory march.",
+      "stylePrefix": null,
+      "references": [],
+      "costUsd": 0.08,
+      "postprocess": "trimmed to 0.0-76.5 s (removes leading silence / fade-out tail), last 1.5 s crossfaded (qsin) into the first 1.5 s for a seamless loop (final length 75.0 s), re-encoded MP3 160 kbps 44.1 kHz with ffmpeg"
+    }
+  ]
+}
